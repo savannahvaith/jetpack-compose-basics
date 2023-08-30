@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -74,7 +76,12 @@ fun Greetings(names: List<String> = List(1000){"$it"}){
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     val expanded = remember { mutableStateOf(false) }
-    var extraPadding = if(expanded.value) 48.dp else 0.dp
+    // animateDP as state will return a state.
+    val extraPadding by animateDpAsState(
+        targetValue = if(expanded.value) 48.dp else 0.dp,
+        // will take 2 seconds to run -- make sure animation is not turned off in developer settings.
+        animationSpec = tween(durationMillis = 2000), label = ""
+    )
     Surface(
         color = MaterialTheme.colorScheme.primary,
         modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
